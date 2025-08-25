@@ -1,0 +1,3 @@
+# README
+
+これはShuのポートフォリオの、Digital Ichibaのバックエンドのリポジトリです。

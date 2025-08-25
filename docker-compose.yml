@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      dockerfile: Dockerfile
+    working_dir: /app
+    command: bin/rails server -b 0.0.0.0 -p 3000
+    volumes:
+      - .:/app
+    ports:
+      - "3000:3000"
+    environment:
+      # Rails側からは DATABASE_URL を使うとシンプルに接続できます
+      DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      RAILS_ENV: development
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+volumes:
+  db_data:
+
+
