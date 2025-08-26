@@ -14,9 +14,19 @@ module AppJwtAuth
       { algorithm: "RS256", iss: APP_JWT_ISS, verify_iss: true,
         aud: APP_JWT_AUD, verify_aud: true })
     email = payload["email"]
+    provider = payload["provider"]
+    provider_subject = payload["provider_subject"]
     head :unauthorized and return if email.blank?
 
-    @current_user = User.find_or_create_by!(email: email)
+    ActiveRecord::Base.transaction do
+      @current_user = User.find_or_create_by!(email: email)
+      @current_user.user_identities.find_or_create_by!(
+        provider: provider,
+        provider_subject: provider_subject
+      )
+    end
+
+
   rescue JWT::DecodeError, JWT::ExpiredSignature
     head :unauthorized
   end

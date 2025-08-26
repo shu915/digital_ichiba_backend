@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_26_032412) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_26_053738) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "user_identities", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "provider", limit: 2, null: false
+    t.text "provider_subject", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["provider", "provider_subject"], name: "index_user_identities_on_provider_and_subject", unique: true
+    t.index ["user_id"], name: "index_user_identities_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.citext "email", null: false
@@ -27,4 +37,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_032412) do
     t.check_constraint "char_length(email::text) <= 100", name: "users_email_maxlen_100"
     t.check_constraint "role = ANY (ARRAY[0, 5, 10])", name: "users_role_enum_values"
   end
+
+  add_foreign_key "user_identities", "users"
 end
