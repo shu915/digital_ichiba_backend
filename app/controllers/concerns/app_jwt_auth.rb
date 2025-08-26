@@ -13,7 +13,7 @@ module AppJwtAuth
     payload, = JWT.decode(bearer, APP_JWT_PUBLIC_KEY, true,
       { algorithm: "RS256", iss: APP_JWT_ISS, verify_iss: true,
         aud: APP_JWT_AUD, verify_aud: true })
-    email = payload["email"] || payload["sub"]
+    email = payload["email"]
     head :unauthorized and return if email.blank?
 
     @current_user = User.find_or_create_by!(email: email)
