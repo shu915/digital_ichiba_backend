@@ -1,0 +1,9 @@
+current directory: /app/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+/usr/local/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /app/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20250826-85-pdlgr4 sitelibdir\=./.gem.20250826-85-pdlgr4 clean
+current directory: /app/vendor/bundle/ruby/3.3.0/gems/websocket-driver-0.8.0/ext/websocket-driver
+make DESTDIR\= sitearchdir\=./.gem.20250826-85-pdlgr4 sitelibdir\=./.gem.20250826-85-pdlgr4
+make failedNo such file or directory - make
