@@ -32,3 +32,6 @@
 /config/master.key
 
 /.DS_Store
+
+/vendor/bundle
+/vendor/cache
