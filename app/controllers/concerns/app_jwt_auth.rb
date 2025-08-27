@@ -26,7 +26,6 @@ module AppJwtAuth
       )
     end
 
-
   rescue JWT::DecodeError, JWT::ExpiredSignature
     head :unauthorized
   end
