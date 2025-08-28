@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_26_053738) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_28_013010) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "shops", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", limit: 40, default: "未設定", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_shops_on_user_id", unique: true
+    t.check_constraint "description IS NULL OR char_length(description) <= 2000", name: "shops_description_length_chk"
+  end
 
   create_table "user_identities", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -38,5 +48,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_053738) do
     t.check_constraint "role = ANY (ARRAY[0, 5, 10])", name: "users_role_enum_values"
   end
 
+  add_foreign_key "shops", "users"
   add_foreign_key "user_identities", "users"
 end

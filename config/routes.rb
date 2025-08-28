@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     post :login, to: "login#create"
+    post :setup_shop, to: "shops#create"
   end
 end
