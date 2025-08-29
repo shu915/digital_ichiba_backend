@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     post :login, to: "login#create"
+    resources :shops, only: [ :create ]
   end
 end
