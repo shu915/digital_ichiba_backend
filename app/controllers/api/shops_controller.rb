@@ -20,9 +20,6 @@ class Api::ShopsController < ActionController::API
 
   def show
     shop = Shop.find(params[:id])
-    unless shop
-      return render json: { error: "Shop not found" }, status: :not_found
-    end
     render json: shop_json(shop), status: :ok
   end
 
