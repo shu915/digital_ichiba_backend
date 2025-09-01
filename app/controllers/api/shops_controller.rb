@@ -20,16 +20,24 @@ class Api::ShopsController < ActionController::API
 
   def show
     shop = Shop.find(params[:id])
+    unless shop
+      return render json: { error: "Shop not found" }, status: :not_found
+    end
     render json: shop_json(shop), status: :ok
   end
 
   def update
     shop = current_user.shop
+    unless shop
+      return render json: { error: "Shop not found" }, status: :not_found
+    end
+    ActiveRecord::Base.transaction do
     permitted = shop_params
     shop.update!(permitted.slice(:name, :description))
 
-    shop.icon.attach(permitted[:icon])     if permitted[:icon].present?
-    shop.header.attach(permitted[:header]) if permitted[:header].present?
+      shop.icon.attach(permitted[:icon])     if permitted[:icon].present?
+      shop.header.attach(permitted[:header]) if permitted[:header].present?
+    end
 
     render json: {
       user:  {
@@ -38,11 +46,7 @@ class Api::ShopsController < ActionController::API
         name: current_user.name,
         role: current_user.role
       },
-      shop:  {
-        id: shop.id,
-        name: shop.name,
-        description: shop.description
-      }
+      shop: shop_json(shop)
     }, status: :ok
   end
 
