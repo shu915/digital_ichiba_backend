@@ -1,6 +1,6 @@
 class Api::ShopsController < ActionController::API
   include AppJwtAuth
-  skip_before_action :authenticate_with_app_jwt!, only: [:index, :show]
+  skip_before_action :authenticate_with_app_jwt!, only: [ :index, :show ]
 
   def create
         ActiveRecord::Base.transaction do
