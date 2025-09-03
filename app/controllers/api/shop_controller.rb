@@ -10,10 +10,7 @@ class Api::ShopController < ActionController::API
 
     render json: {
       user: user_json(current_user),
-      shop: {
-        id: current_user.shop.id,
-        name: current_user.shop.name
-      }
+      shop: shop_json(current_user.shop)
     }, status: :ok
   end
 
@@ -24,12 +21,8 @@ class Api::ShopController < ActionController::API
     end
 
     render json: {
-      shop: {
-        id: shop.id,
-        name: shop.name,
-        description: shop.description
-      }
-    }, status: :ok
+      shop: shop_json(shop)
+      }, status: :ok
   end
 
   def update
@@ -50,11 +43,8 @@ class Api::ShopController < ActionController::API
 
     render json: {
       user: user_json(current_user),
-      shop: {
-        id: shop.id,
-        name: shop.name,
-        description: shop.description
-      }
+      shop: shop_json(shop)
+      
     }, status: :ok
   end
 

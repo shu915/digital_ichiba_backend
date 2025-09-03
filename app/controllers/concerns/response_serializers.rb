@@ -14,7 +14,9 @@ module ResponseSerializers
     {
       id: shop.id,
       name: shop.name,
-      description: shop.description
+      description: shop.description,
+      icon_url: shop.icon,
+      header_url: shop.header
     }
   end
 end
