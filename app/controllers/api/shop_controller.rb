@@ -46,7 +46,6 @@ class Api::ShopController < ActionController::API
       else
         return render json: { errors: shop.errors.full_messages }, status: :unprocessable_entity
       end
-
     end
 
     render json: {

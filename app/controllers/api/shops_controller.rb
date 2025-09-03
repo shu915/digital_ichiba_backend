@@ -1,6 +1,6 @@
 class Api::ShopsController < ActionController::API
   include ResponseSerializers
-  
+
   def index
     shops = Shop.all
     render json: { shops: shops.map { |shop| shop_json(shop) } }, status: :ok

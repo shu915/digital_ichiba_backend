@@ -14,7 +14,7 @@ module ResponseSerializers
     {
       id: shop.id,
       name: shop.name,
-      description: shop.description,
+      description: shop.description
     }
   end
 end
