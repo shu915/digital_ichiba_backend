@@ -19,7 +19,17 @@ class Api::ShopController < ActionController::API
 
   def show
     shop = current_user.shop
-    render json: { shop: shop_json(shop) }, status: :ok
+    unless shop
+      return render json: { error: "Shop not found" }, status: :not_found
+    end
+
+    render json: {
+      shop: {
+        id: shop.id,
+        name: shop.name,
+        description: shop.description
+      }
+    }, status: :ok
   end
 
   def update
@@ -30,10 +40,13 @@ class Api::ShopController < ActionController::API
 
     ActiveRecord::Base.transaction do
       permitted = shop_params
-      shop.update!(permitted.slice(:name, :description))
+      if shop.update(permitted.slice(:name, :description))
+        shop.icon.attach(permitted[:icon])     if permitted[:icon].present?
+        shop.header.attach(permitted[:header]) if permitted[:header].present?
+      else
+        return render json: { errors: shop.errors.full_messages }, status: :unprocessable_entity
+      end
 
-      shop.icon.attach(permitted[:icon]) if permitted[:icon].present?
-      shop.header.attach(permitted[:header]) if permitted[:header].present?
     end
 
     render json: {
