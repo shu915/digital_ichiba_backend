@@ -15,8 +15,8 @@ module ResponseSerializers
       id: shop.id,
       name: shop.name,
       description: shop.description,
-      icon_url: shop.icon,
-      header_url: shop.header
+      icon_url:   shop.icon.attached?   ? url_for(shop.icon)   : nil,
+      header_url: shop.header.attached? ? url_for(shop.header) : nil
     }
   end
 end
