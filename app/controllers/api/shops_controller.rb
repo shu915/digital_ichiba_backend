@@ -1,7 +1,5 @@
 class Api::ShopsController < ActionController::API
-  include AppJwtAuth
   include ResponseSerializers
-  skip_before_action :authenticate_with_app_jwt!, only: [ :index, :show ]
 
   def create
         ActiveRecord::Base.transaction do
@@ -23,30 +21,5 @@ class Api::ShopsController < ActionController::API
   def show
     shop = Shop.find(params[:id])
     render json: { shop: shop_json(shop) }, status: :ok
-  end
-
-  def update
-    shop = current_user.shop
-    unless shop
-      return render json: { error: "Shop not found" }, status: :not_found
-    end
-    ActiveRecord::Base.transaction do
-    permitted = shop_params
-    shop.update!(permitted.slice(:name, :description))
-
-      shop.icon.attach(permitted[:icon])     if permitted[:icon].present?
-      shop.header.attach(permitted[:header]) if permitted[:header].present?
-    end
-
-    render json: {
-        user: user_json(current_user),
-        shop: shop_json(shop)
-    }, status: :ok
-  end
-
-  private
-
-  def shop_params
-    params.require(:shop).permit(:name, :description, :icon, :header)
   end
 end

@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     resource :login, only: [ :create ]
-    resource :shop, only: [ :update ]
-    resources :shops, only: [ :index, :show, :create ]
+    resource :shop, only: [ :show, :create, :update ], controller: :shop
+    resources :shops, only: [ :index, :show ]
   end
 end
