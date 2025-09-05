@@ -2,6 +2,7 @@ class Api::ShopController < ActionController::API
   include AppJwtAuth
   include ResponseSerializers
 
+
   def create
     ActiveRecord::Base.transaction do
       current_user.role_shop! unless current_user.role_shop?

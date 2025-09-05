@@ -3,6 +3,7 @@ services:
     build:
       dockerfile: Dockerfile
     working_dir: /app
+    entrypoint: ./docker-entrypoint
     command: bin/rails server -b 0.0.0.0 -p 3000
     volumes:
       - .:/app

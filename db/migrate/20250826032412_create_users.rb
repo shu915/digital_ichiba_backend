@@ -1,4 +1,4 @@
-class CreateUsers < ActiveRecord::Migration[7.2]  # 8系でも可
+class CreateUsers < ActiveRecord::Migration[8.0]
   def change
     enable_extension "citext" unless extension_enabled?("citext")
 
