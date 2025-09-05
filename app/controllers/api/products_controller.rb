@@ -6,6 +6,10 @@ class Api::ProductsController < ActionController::API
   def create
     shop = current_user.shop or return render json: { error: "Shop not found" }, status: :not_found
     pp = product_params
+    price = Integer(pp[:price], exception: false)
+    stock = Integer(pp[:stock], exception: false)
+    return render json: { errors: [ "price/stock が不正です" ] }, status: :unprocessable_entity if price.nil? || stock.nil?
+
 
     product = shop.products.new(
       name: pp[:name],
