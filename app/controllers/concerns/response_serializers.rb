@@ -19,4 +19,15 @@ module ResponseSerializers
       header_url: shop.header.attached? ? url_for(shop.header) : nil
     }
   end
+
+  def product_json(product)
+    {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: product.price_excluding_tax_cents,
+      stock: product.stock_quantity,
+      image_url: product.image.attached? ? url_for(product.image) : nil
+    }
+  end
 end

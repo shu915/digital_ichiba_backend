@@ -11,5 +11,6 @@ Rails.application.routes.draw do
     resource :login, only: [ :create ]
     resource :shop, only: [ :show, :create, :update ], controller: :shop
     resources :shops, only: [ :index, :show ]
+    resources :products, only: [ :create, :index, :show ]
   end
 end
