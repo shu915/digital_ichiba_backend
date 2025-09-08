@@ -18,7 +18,7 @@ class CreateTaxRates < ActiveRecord::Migration[8.0]
 
     # 検索最適化
     add_index :tax_rates, :effective_from
-    add_index :tax_rates, [:effective_from, :effective_to]
+    add_index :tax_rates, [ :effective_from, :effective_to ]
 
     # open-endedレコードは常に1件のみ
     add_index :tax_rates, :effective_to,
