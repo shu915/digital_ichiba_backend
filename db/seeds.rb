@@ -7,3 +7,5 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+TaxRate.find_or_create_by!(name: "日本消費税10%", rate: 0.1, effective_from: Date.new(2019, 10, 01))

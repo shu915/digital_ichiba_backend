@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_09_05_013743) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_08_044611) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -63,6 +63,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_09_05_013743) do
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_shops_on_user_id", unique: true
     t.check_constraint "description IS NULL OR char_length(description) <= 2000", name: "shops_description_length_chk"
+  end
+
+  create_table "tax_rates", force: :cascade do |t|
+    t.string "name", limit: 100, null: false
+    t.decimal "rate", precision: 5, scale: 4, null: false
+    t.datetime "effective_from", null: false
+    t.datetime "effective_to"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "user_identities", force: :cascade do |t|

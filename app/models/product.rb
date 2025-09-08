@@ -7,4 +7,10 @@ class Product < ApplicationRecord
   validates :price_excluding_tax_cents, presence: true,
                                         numericality: { greater_than_or_equal_to: 0 }
   validates :stock_quantity, numericality: { greater_than_or_equal_to: 0 }
+
+  # 税込価格を計算して返す。DBには保存しない仮想属性。
+  def price_including_tax_cents(at: Time.current)
+    rate = (TaxRate.current_rate(at) || 0).to_f
+    (price_excluding_tax_cents * (1.0 + rate)).ceil
+  end
 end
