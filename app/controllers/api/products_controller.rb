@@ -27,8 +27,9 @@ class Api::ProductsController < ActionController::API
   end
 
   def index
-    products = current_user.shop.products
-    render json: { products: products.map { |product| product_json(product) } }, status: :ok
+    # products = current_user.shop.products.includes(:image)
+    # render json: { products: products.map { |product| product_json(product) } }, status: :ok
+    render json: { products: [] }, status: :ok
   end
 
   def show

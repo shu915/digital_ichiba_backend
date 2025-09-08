@@ -1,6 +1,6 @@
 class TaxRate < ApplicationRecord
   validates :name, presence: true, length: { maximum: 100 }
-  validates :rate, presence: true, numericality: true
+  validates :rate, presence: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 1 }
   validates :effective_from, presence: true
 
   scope :current_at, ->(time) do
