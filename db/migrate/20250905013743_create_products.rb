@@ -15,11 +15,11 @@ class CreateProducts < ActiveRecord::Migration[8.0]
     add_check_constraint :products,
       "(description IS NULL) OR (char_length(description) <= 500)",
        name: "products_description_length_chk"
-       add_check_constraint :products,
-             "price_excluding_tax_cents >= 0",
-             name: "products_price_nonneg_chk"
-             add_check_constraint :products,
-             "stock_quantity >= 0",
-             name: "products_stock_nonneg_chk"
+    add_check_constraint :products,
+      "price_excluding_tax_cents >= 0",
+      name: "products_price_nonneg_chk"
+    add_check_constraint :products,
+      "stock_quantity >= 0",
+      name: "products_stock_nonneg_chk"
   end
 end

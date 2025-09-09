@@ -24,8 +24,10 @@ module ResponseSerializers
     {
       id: product.id,
       name: product.name,
+      shop_id: product.shop.id,
+      shop_name: product.shop.name,
       description: product.description,
-      price: product.price_excluding_tax_cents,
+      price_including_tax_cents: product.price_including_tax_cents,
       stock: product.stock_quantity,
       image_url: product.image.attached? ? url_for(product.image) : nil
     }
