@@ -36,6 +36,8 @@ end
       price_excluding_tax_cents: (500..5000).step(50).to_a.sample,
       stock_quantity: rand(0..50)
     )
-    p.image.attach(io: File.open(image_path), filename: "sample_product.webp", content_type: "image/webp")
+    File.open(image_path) do |file|
+      p.image.attach(io: file, filename: "sample_product.webp", content_type: "image/webp")
+    end
   end
 end

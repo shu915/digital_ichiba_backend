@@ -32,7 +32,9 @@ class Api::ProductsController < ActionController::API
       scope = scope.where(shop_id: params[:shop_id])
 
       total_items = scope.count
-      products = scope.offset((params[:page].to_i - 1) * 12).limit(12).with_attached_image
+      page = params[:page].to_i
+      page = 1 if page < 1
+      products = scope.offset((page - 1) * 12).limit(12).with_attached_image
 
       render json: {
         products: products.map { |product| product_json(product) },
