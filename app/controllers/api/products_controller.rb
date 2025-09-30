@@ -5,7 +5,7 @@ class Api::ProductsController < ActionController::API
 
   def create
     shop = current_user.shop or return render json: { error: "Shop not found" }, status: :not_found
-    pp = product_params
+    pp = create_product_params
     price = Integer(pp[:price], exception: false)
     stock = Integer(pp[:stock], exception: false)
     return render json: { errors: [ "price/stock が不正です" ] }, status: :unprocessable_entity if price.nil? || stock.nil?
@@ -20,26 +20,38 @@ class Api::ProductsController < ActionController::API
     product.image.attach(pp[:image]) if pp[:image]
 
     if product.save
-      render json: { product: product_json(product) }, status: :created
+      render json: { product: product_json(product, is_detail: true) }, status: :created
     else
       render json: { errors: product.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
   def index
-    # products = current_user.shop.products.includes(:image)
-    # render json: { products: products.map { |product| product_json(product) } }, status: :ok
-    render json: { products: [] }, status: :ok
+    if params[:shop_id]
+      scope = Product.all
+      scope = scope.where(shop_id: params[:shop_id])
+
+      total_items = scope.count
+      products = scope.offset((params[:page].to_i - 1) * 12).limit(12).with_attached_image
+
+      render json: {
+        products: products.map { |product| product_json(product) },
+        total_items: total_items
+        }, status: :ok
+    else
+      products = Product.with_attached_image
+      render json: { products: products.map { |product| product_json(product) }, total_items: products.count   }, status: :ok
+    end
   end
 
   def show
     product = Product.find(params[:id])
-    render json: { product: product_json(product) }, status: :ok
+    render json: { product: product_json(product, is_detail: true) }, status: :ok
   end
 
   private
 
-  def product_params
+  def create_product_params
     params.require(:product).permit(:name, :description, :price, :stock, :image)
   end
 end

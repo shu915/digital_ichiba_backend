@@ -9,3 +9,33 @@
 #   end
 
 TaxRate.find_or_create_by!(name: "日本消費税10%", rate: 0.1, effective_from: Date.new(2019, 10, 01))
+
+# 一般ユーザー（customer）を10人
+10.times do |i|
+  email = "customer#{i + 1}@example.com"
+  User.find_or_create_by!(email:) do |u|
+    u.name = "Customer #{i + 1}"
+    u.role = :customer
+  end
+end
+
+10.times do |i|
+  user = User.find_or_create_by!(email: "shop#{i + 1}@example.com") do |u|
+    u.name = "Shop User #{i + 1}"
+    u.role = :shop
+  end
+
+  shop = user.shop || Shop.create!(user: user, name: "ショップ#{i + 1}", description: "サンプル#{i + 1}")
+
+  image_path = Rails.root.join("db/seed_files/sample_product.webp")
+
+  100.times do |j|
+    p = shop.products.create!(
+      name: "商品#{j + 1}",
+      description: "サンプル商品#{j + 1}",
+      price_excluding_tax_cents: (500..5000).step(50).to_a.sample,
+      stock_quantity: rand(0..50)
+    )
+    p.image.attach(io: File.open(image_path), filename: "sample_product.webp", content_type: "image/webp")
+  end
+end

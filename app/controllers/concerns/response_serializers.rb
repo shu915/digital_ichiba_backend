@@ -20,16 +20,23 @@ module ResponseSerializers
     }
   end
 
-  def product_json(product)
-    {
+  def product_json(product, is_detail: false)
+    base = {
       id: product.id,
       name: product.name,
-      shop_id: product.shop.id,
-      shop_name: product.shop.name,
-      description: product.description,
       price_including_tax_cents: product.price_including_tax_cents,
-      stock: product.stock_quantity,
       image_url: product.image.attached? ? url_for(product.image) : nil
     }
+
+    if is_detail
+      base.merge!(
+        shop_id: product.shop.id,
+        shop_name: product.shop.name,
+        shop_header_url: product.shop.header.attached? ? url_for(product.shop.header) : nil,
+        description: product.description
+      )
+    end
+
+    base
   end
 end
