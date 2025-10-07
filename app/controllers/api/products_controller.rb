@@ -1,5 +1,5 @@
 class Api::ProductsController < ActionController::API
-  include AppJwtAuth
+  include RailsJwtAuth
   include ResponseSerializers
   skip_before_action :authenticate_with_app_jwt!, only: [ :show, :index ]
 

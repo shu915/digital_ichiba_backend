@@ -1,5 +1,5 @@
 class Api::LoginsController < ActionController::API
-  include AppJwtAuth
+  include RailsJwtAuth
   include ResponseSerializers
 
   def create

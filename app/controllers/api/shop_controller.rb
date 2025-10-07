@@ -1,5 +1,5 @@
 class Api::ShopController < ActionController::API
-  include AppJwtAuth
+  include RailsJwtAuth
   include ResponseSerializers
 
 
