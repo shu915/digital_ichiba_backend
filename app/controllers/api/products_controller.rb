@@ -1,7 +1,7 @@
 class Api::ProductsController < ActionController::API
   include RailsJwtAuth
   include ResponseSerializers
-  skip_before_action :authenticate_with_app_jwt!, only: [ :show, :index ]
+  skip_before_action :authenticate_with_rails_jwt!, only: [ :show, :index ]
 
   def create
     shop = current_user.shop or return render json: { error: "Shop not found" }, status: :not_found
