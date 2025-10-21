@@ -13,7 +13,7 @@ SNSと直結して5分でオンラインショップを開設できるECプラ�
 このリポジトリのバージョン情報です。  
 Ruby 3.3.9  
 Rails 8.0.2.1  
-Postgresql 16.10  
+PostgreSQL 16.10  
 Docker 28.4.0  
 
 こちらは同じプロジェクトのフロントエンドのリポジトリです。  
@@ -24,6 +24,6 @@ Auth.js 5.0.0-beta.29
 TailwindCSS 4.1.12  
 
 ## Setup
-```
+```bash
 docker compose up
 ```

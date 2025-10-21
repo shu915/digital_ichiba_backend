@@ -52,7 +52,7 @@ class Api::ProductsController < ActionController::API
   end
 
   def update
-    return render json: { error: "Shop not found" }, status: :not_found unless current_user.shop
+    product = current_user.shop.products.find(params[:id])
 
     product = Product.find(params[:id])
     pp = create_or_update_product_params
@@ -73,7 +73,7 @@ class Api::ProductsController < ActionController::API
   end
 
   def destroy
-    return render json: { error: "Shop not found" }, status: :not_found unless current_user.shop
+    product = current_user.shop.products.find(params[:id])
 
     product = Product.find(params[:id])
     product.destroy
