@@ -5,7 +5,7 @@ class Api::ProductsController < ActionController::API
 
   def create
     shop = current_user.shop or return render json: { error: "Shop not found" }, status: :not_found
-    pp = create_product_params
+    pp = create_or_update_product_params
     price = Integer(pp[:price], exception: false)
     stock = Integer(pp[:stock], exception: false)
     return render json: { errors: [ "price/stock が不正です" ] }, status: :unprocessable_entity if price.nil? || stock.nil?
@@ -52,8 +52,10 @@ class Api::ProductsController < ActionController::API
   end
 
   def update
+    return render json: { error: "Shop not found" }, status: :not_found unless current_user.shop
+
     product = Product.find(params[:id])
-    pp = create_product_params
+    pp = create_or_update_product_params
 
     price = Integer(pp[:price], exception: false)
     stock = Integer(pp[:stock], exception: false)
@@ -71,6 +73,8 @@ class Api::ProductsController < ActionController::API
   end
 
   def destroy
+    return render json: { error: "Shop not found" }, status: :not_found unless current_user.shop
+
     product = Product.find(params[:id])
     product.destroy
     render json: { message: "商品を削除しました" }, status: :ok
@@ -78,7 +82,7 @@ class Api::ProductsController < ActionController::API
 
   private
 
-  def create_product_params
+  def create_or_update_product_params
     params.require(:product).permit(:name, :description, :price, :stock, :image)
   end
 end
