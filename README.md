@@ -21,3 +21,4 @@ TypeScript 5.9.2
 React 19.16  
 Next.js 15.5.0  
 Auth.js 5.0.0-beta.29  
+TailwindCSS 4.1.12  
