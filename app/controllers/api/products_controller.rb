@@ -53,8 +53,10 @@ class Api::ProductsController < ActionController::API
 
   def update
     product = current_user.shop.products.find(params[:id])
+    if product.nil?
+      return render json: { error: "商品の編集権限がありません" }, status: :unauthorized
+    end
 
-    product = Product.find(params[:id])
     pp = create_or_update_product_params
 
     price = Integer(pp[:price], exception: false)
@@ -74,8 +76,10 @@ class Api::ProductsController < ActionController::API
 
   def destroy
     product = current_user.shop.products.find(params[:id])
+    if product.nil?
+      return render json: { error: "商品の削除権限がありません" }, status: :unauthorized
+    end
 
-    product = Product.find(params[:id])
     product.destroy
     render json: { message: "商品を削除しました" }, status: :ok
   end
