@@ -16,14 +16,14 @@ module RailsJwtAuth
       bearer,
       public_key,
       true,
-      { algorithms: ["RS256"],
+      { algorithms: [ "RS256" ],
         iss: ENV["APP_JWT_ISS"],
         verify_iss: true,
         aud: ENV["APP_JWT_AUD"],
         verify_aud: true,
         verify_exp: true
       })
-      
+
     email = payload["email"]
     provider = payload["provider"]
     provider_subject = payload["provider_subject"]

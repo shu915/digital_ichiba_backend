@@ -51,6 +51,31 @@ class Api::ProductsController < ActionController::API
     render json: { product: product_json(product, is_detail: true) }, status: :ok
   end
 
+  def update
+    product = Product.find(params[:id])
+    pp = create_product_params
+
+    price = Integer(pp[:price], exception: false)
+    stock = Integer(pp[:stock], exception: false)
+    return render json: { errors: [ "price/stock が不正です" ] }, status: :unprocessable_entity if price.nil? || stock.nil?
+
+    product.update(
+      name: pp[:name],
+      description: pp[:description],
+      price_excluding_tax_cents: pp[:price].to_i,
+      stock_quantity: pp[:stock].to_i,
+    )
+    product.image.attach(pp[:image]) if pp[:image]
+
+    render json: { product: product_json(product, is_detail: true) }, status: :ok
+  end
+
+  def destroy
+    product = Product.find(params[:id])
+    product.destroy
+    render json: { message: "商品を削除しました" }, status: :ok
+  end
+
   private
 
   def create_product_params
