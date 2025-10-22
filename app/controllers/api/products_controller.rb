@@ -40,9 +40,11 @@ class Api::ProductsController < ActionController::API
         products: products.map { |product| product_json(product) },
         total_items: total_items
         }, status: :ok
-    else
-      products = Product.with_attached_image
-      render json: { products: products.map { |product| product_json(product) }, total_items: products.count   }, status: :ok
+    end
+
+    if params[:ids]
+      products = Product.where(id: params[:ids].split(","))
+      render json: { products: products.map { |product| product_json(product, is_detail: true) } }, status: :ok
     end
   end
 
