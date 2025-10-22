@@ -43,7 +43,11 @@ class Api::ProductsController < ActionController::API
     end
 
     if params[:ids]
-      products = Product.where(id: params[:ids].split(","))
+      ids = params[:ids].split(",")
+      products = Product
+        .where(id: ids)
+        .includes(shop: { header_attachment: :blob })
+        .with_attached_image
       render json: { products: products.map { |product| product_json(product, is_detail: true) } }, status: :ok
     end
   end
