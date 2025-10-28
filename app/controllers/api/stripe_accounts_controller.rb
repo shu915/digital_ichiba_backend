@@ -35,7 +35,7 @@ class Api::StripeAccountsController < ActionController::API
         account_link = Stripe::AccountLink.create({
           account: account_id,
           refresh_url: "#{base_url}/dashboard/shop#refresh",
-          return_url: "#{base_url}/dashboard/shop",
+          return_url: "#{base_url}/dashboard/shop/refresh",
           type: "account_onboarding"
         })
         render json: { onboarding_url: account_link.url }, status: :ok
