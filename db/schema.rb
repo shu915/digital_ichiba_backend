@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_24_000000) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_28_000002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -62,6 +62,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_24_000000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "stripe_connect_account_id"
+    t.boolean "stripe_onboarded", default: false, null: false
     t.index ["stripe_connect_account_id"], name: "index_shops_on_stripe_connect_account_id", unique: true
     t.index ["user_id"], name: "index_shops_on_user_id", unique: true
     t.check_constraint "description IS NULL OR char_length(description) <= 2000", name: "shops_description_length_chk"

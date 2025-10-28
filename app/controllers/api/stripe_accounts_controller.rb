@@ -25,17 +25,21 @@ class Api::StripeAccountsController < ActionController::API
 
       account = Stripe::Account.retrieve(account_id)
 
-      if account.charges_enabled
-        return render json: { code: "STRIPE_ALREADY_CONNECTED", message: "Stripe連携済みです" }, status: :conflict
-      end
+      # 常にStripeの最新状態で判定（DBのラグに依存しない）
+      onboarded = account.charges_enabled || account.details_submitted
 
-      account_link = Stripe::AccountLink.create({
-        account: account_id,
-        refresh_url: "#{base_url}/dashboard/shop",
-        return_url: "#{base_url}/dashboard/shop",
-        type: "account_onboarding"
-      })
-      render json: { onboarding_url: account_link.url }, status: :ok
+      if onboarded
+        login_link = Stripe::Account.create_login_link(account_id)
+        render json: { login_url: login_link.url }, status: :ok
+      else
+        account_link = Stripe::AccountLink.create({
+          account: account_id,
+          refresh_url: "#{base_url}/dashboard/shop#refresh",
+          return_url: "#{base_url}/dashboard/shop",
+          type: "account_onboarding"
+        })
+        render json: { onboarding_url: account_link.url }, status: :ok
+      end
     rescue Stripe::StripeError => e
       Rails.logger.error("Stripe error: #{e.message}")
       render json: { error: "Stripe連携エラー: #{e.message}" }, status: :unprocessable_entity
