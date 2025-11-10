@@ -60,19 +60,18 @@ class Api::StripeWebhooksController < ActionController::API
         return head :ok
       end
 
-      rate = (TaxRate.current_rate || 0).to_f
-      subtotal_cents = 0
-      line_items.each do |li|
-        pid = li.price&.product&.metadata&.[]("product_id")&.to_i
-        qty = li.quantity.to_i
-        product = products_by_id[pid]
-        next unless product && qty > 0
-        subtotal_cents += product.price_excluding_tax_cents * qty
-      end
-      tax_cents = (subtotal_cents * rate).ceil
+      # Stripe計算値を優先利用（Checkout Sessionのサマリ）
+      subtotal_cents = session["amount_subtotal"].to_i
       shipping_cents = session["total_details"]&.[]("amount_shipping").to_i
-      shipping_cents = ENV["SHIPPING_CENTS"].to_i if shipping_cents <= 0
-      total_cents = subtotal_cents + tax_cents + shipping_cents
+      tax_cents = session["total_details"]&.[]("amount_tax").to_i
+      total_cents = session["amount_total"].to_i
+      # フォールバック（送料が未設定の場合はENV、なければ500）
+      if shipping_cents <= 0
+        env_shipping = ENV["SHIPPING_CENTS"].to_i
+        shipping_cents = env_shipping.positive? ? env_shipping : 500
+        # 総額が未設定なら再計算
+        total_cents = subtotal_cents + tax_cents + shipping_cents if total_cents <= 0
+      end
 
       begin
         ActiveRecord::Base.transaction do
