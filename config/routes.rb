@@ -14,5 +14,6 @@ Rails.application.routes.draw do
     resources :products, only: [ :create, :index, :show, :update, :destroy ]
     resource :stripe_accounts, only: [ :create ]
     resource :stripe_webhooks, only: [ :create ]
+    resource :stripe_checkouts, only: [ :create ]
   end
 end

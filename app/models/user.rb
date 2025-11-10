@@ -2,6 +2,8 @@
 class User < ApplicationRecord
   has_many :user_identities, dependent: :destroy
   has_one :shop, dependent: :destroy
+  has_many :user_addresses, dependent: :destroy
+  has_many :orders, dependent: :nullify
 
   enum :role, { customer: 0, shop: 5, admin: 10 }, prefix: true
 

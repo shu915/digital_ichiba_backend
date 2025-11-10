@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_28_000002) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_10_000004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -41,6 +41,49 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_28_000002) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "order_addresses", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.string "full_name", null: false
+    t.string "phone"
+    t.string "postal_code", null: false
+    t.string "country_code", limit: 2, default: "JP", null: false
+    t.string "state", null: false
+    t.string "city", null: false
+    t.string "line1", null: false
+    t.string "line2"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_addresses_on_order_id"
+  end
+
+  create_table "order_items", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "product_id", null: false
+    t.text "title_snapshot", null: false
+    t.integer "unit_price_cents_snapshot", null: false
+    t.integer "quantity", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_items_on_order_id"
+    t.index ["product_id"], name: "index_order_items_on_product_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "shop_id", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "subtotal_cents", null: false
+    t.integer "tax_cents", null: false
+    t.integer "shipping_cents", default: 500, null: false
+    t.integer "total_cents", null: false
+    t.datetime "placed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["shop_id"], name: "index_orders_on_shop_id"
+    t.index ["status"], name: "index_orders_on_status"
+    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -77,6 +120,21 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_28_000002) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_addresses", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.string "postal_code", null: false
+    t.string "prefecture", null: false
+    t.string "city", null: false
+    t.string "address1", null: false
+    t.string "address2"
+    t.string "country", default: "JP", null: false
+    t.string "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_user_addresses_on_user_id"
+  end
+
   create_table "user_identities", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.integer "provider", limit: 2, null: false
@@ -102,7 +160,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_28_000002) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "order_addresses", "orders"
+  add_foreign_key "order_items", "orders"
+  add_foreign_key "order_items", "products"
+  add_foreign_key "orders", "shops"
+  add_foreign_key "orders", "users"
   add_foreign_key "products", "shops"
   add_foreign_key "shops", "users"
+  add_foreign_key "user_addresses", "users"
   add_foreign_key "user_identities", "users"
 end
