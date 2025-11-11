@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resource :shop, only: [ :show, :create, :update ], controller: :shop
     resources :shops, only: [ :index, :show ]
     resources :products, only: [ :create, :index, :show, :update, :destroy ]
+    resources :orders, only: [ :index, :show ]
     resource :stripe_accounts, only: [ :create ]
     resource :stripe_webhooks, only: [ :create ]
     resource :stripe_checkouts, only: [ :create ]
