@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   namespace :api do
     resource :login, only: [ :create ]
     resource :shop, only: [ :show, :create, :update ], controller: :shop
+    namespace :shop do
+      resources :orders, only: [ :index, :show ]
+    end
     resources :shops, only: [ :index, :show ]
     resources :products, only: [ :create, :index, :show, :update, :destroy ]
     resources :orders, only: [ :index, :show ]
