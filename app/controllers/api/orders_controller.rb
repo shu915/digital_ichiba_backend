@@ -69,5 +69,3 @@ class Api::OrdersController < ActionController::API
     }, status: :ok
   end
 end
-
-
