@@ -6,7 +6,14 @@ class Api::OrdersController < ActionController::API
     user = current_user
     return render json: { error: "Unauthorized" }, status: :unauthorized unless user
 
-    orders = Order.includes(:shop).where(user_id: user.id).order(created_at: :desc).limit(50)
+    page = params[:page].to_i
+    page = 1 if page < 1
+    per_page = 12
+
+    scope = Order.includes(:shop).where(user_id: user.id)
+    total_items = scope.count
+    orders = scope.order(created_at: :desc).offset((page - 1) * per_page).limit(per_page)
+
     render json: {
       orders: orders.map { |o|
         {
@@ -19,7 +26,8 @@ class Api::OrdersController < ActionController::API
           shipping_cents: o.shipping_cents,
           shop: { id: o.shop_id, name: o.shop&.name }
         }
-      }
+      },
+      total_items: total_items
     }, status: :ok
   end
 

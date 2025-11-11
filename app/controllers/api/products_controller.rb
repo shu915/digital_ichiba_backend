@@ -40,6 +40,7 @@ class Api::ProductsController < ActionController::API
         products: products.map { |product| product_json(product) },
         total_items: total_items
         }, status: :ok
+      return
     end
 
     if params[:ids]
@@ -49,7 +50,18 @@ class Api::ProductsController < ActionController::API
         .includes(shop: { header_attachment: :blob })
         .with_attached_image
       render json: { products: products.map { |product| product_json(product, is_detail: true) } }, status: :ok
+      return
     end
+
+    # デフォルト: 新着商品（トップページ向け）
+    limit = params[:limit].presence&.to_i || 10
+    limit = 10 if limit <= 0 || limit > 50
+    products = Product
+      .order(created_at: :desc)
+      .limit(limit)
+      .includes(shop: { header_attachment: :blob })
+      .with_attached_image
+    render json: { products: products.map { |product| product_json(product) } }, status: :ok
   end
 
   def show
