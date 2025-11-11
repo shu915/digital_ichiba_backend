@@ -22,6 +22,7 @@ class Api::ShopController < ActionController::API
     end
 
     render json: {
+      user: user_json(current_user),
       shop: shop_json(shop)
       }, status: :ok
   end

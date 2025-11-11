@@ -13,8 +13,10 @@ module ResponseSerializers
   def shop_json(shop)
     {
       id: shop.id,
+      stripe_connect_account_id: shop.stripe_connect_account_id,
       name: shop.name,
       description: shop.description,
+      stripe_onboarded: shop.stripe_onboarded,
       icon_url:   shop.icon.attached?   ? url_for(shop.icon)   : nil,
       header_url: shop.header.attached? ? url_for(shop.header) : nil
     }

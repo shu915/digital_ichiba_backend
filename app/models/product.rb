@@ -1,5 +1,6 @@
 class Product < ApplicationRecord
   belongs_to :shop
+  has_many :order_items, dependent: :nullify
   has_one_attached :image
 
   validates :name, presence: true, length: { maximum: 120 }
