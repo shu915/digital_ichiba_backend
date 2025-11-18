@@ -10,8 +10,10 @@ services:
     ports:
       - "3000:3000"
     environment:
-      # Rails側からは DATABASE_URL を使うとシンプルに接続できます
-      DATABASE_URL: postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
       RAILS_ENV: development
       APP_JWT_PUBLIC_KEY: ${APP_JWT_PUBLIC_KEY}
       APP_JWT_ISS: ${APP_JWT_ISS}
