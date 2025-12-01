@@ -48,7 +48,9 @@ class Api::StripeCheckoutsController < ActionController::API
     return render json: { error: "No valid line items" }, status: :unprocessable_entity if line_items.empty?
 
     # 送料と手数料（任意）
-    shipping_cents = 500
+    shipping_cents = ENV["SHIPPING_CENTS"].to_i
+    return render json: { error: "SHIPPING_CENTS is not set" }, status: :unprocessable_entity unless shipping_cents.positive?
+
     fee_percent = (ENV["PLATFORM_FEE_PERCENT"] || "0").to_f
     application_fee_amount = ((total_cents + shipping_cents) * (fee_percent / 100.0)).floor
 

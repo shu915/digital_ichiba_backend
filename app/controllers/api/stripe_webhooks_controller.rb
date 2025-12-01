@@ -121,8 +121,6 @@ class Api::StripeWebhooksController < ActionController::API
         Rails.logger.error("[StripeWebhook] create order failed: #{e.class} #{e.message}")
         return head :ok
       end
-    when "payment_intent.succeeded"
-      # TODO: 必要に応じて入金確定処理を実装
     end
 
     head :ok
