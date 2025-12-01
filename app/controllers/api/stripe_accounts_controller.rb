@@ -5,10 +5,10 @@ class Api::StripeAccountsController < ActionController::API
     shop = current_user.shop
     return render json: { error: "Shop not found" }, status: :not_found unless shop
 
-    begin
-      base_url = ENV["NEXT_URL"]
-      return render json: { error: "NEXT_URL is not set" }, status: :unprocessable_entity unless base_url.present?
+    base_url = ENV["NEXT_URL"]
+    return render json: { error: "NEXT_URL is not set" }, status: :unprocessable_entity unless base_url.present?
 
+    begin
       account_id = shop.stripe_connect_account_id
       unless account_id.present?
         account = Stripe::Account.create({
