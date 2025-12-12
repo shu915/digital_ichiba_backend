@@ -17,11 +17,11 @@ PostgreSQL 16.10
 Docker 28.4.0  
 
 こちらは同じプロジェクトのフロントエンドのリポジトリです。  
-TypeScript 5.9.2  
+TypeScript 5.9.3  
 React 19.1.0  
-Next.js 15.5.0  
-Auth.js 5.0.0-beta.29  
-TailwindCSS 4.1.12  
+Next.js 15.5.7  
+Auth.js 5.0.0-beta.30  
+TailwindCSS 4.1.17  
 
 ## Setup
 ```bash

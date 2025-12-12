@@ -1,0 +1,61 @@
+name: ECS Fargate Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  AWS_REGION: ap-northeast-1
+  ECS_CLUSTER_NAME: digital-ichiba-cluster
+  ECS_SERVICE_NAME: digital-ichiba-service
+  ECS_TASK_DEFINITION_FILE: .aws/task_definition.json
+  ECR_REGISTRY: 575357958164.dkr.ecr.ap-northeast-1.amazonaws.com
+  ECR_REGISTRY_NAME: digital-ichiba-ecr
+  AWS_ROLE_TO_ASSUME: arn:aws:iam::575357958164:role/DigitalIchibaGitHubActionsDeployRole
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy Backend to ECS Fargate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Get source code
+        uses: actions/checkout@v5
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image to ECR
+        run: |
+          docker build -t $ECR_REGISTRY_NAME .
+          docker tag $ECR_REGISTRY_NAME:latest $ECR_REGISTRY/$ECR_REGISTRY_NAME:latest
+          docker push $ECR_REGISTRY/$ECR_REGISTRY_NAME:latest
+
+      - name: Render Amazon ECS task definition
+        id: render-digital-ichiba-container
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION_FILE }}
+          container-name: digital-ichiba
+          image: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REGISTRY_NAME }}:latest
+
+      - name: Deploy to Amazon ECS service
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ steps.render-digital-ichiba-container.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE_NAME }}
+          cluster: ${{ env.ECS_CLUSTER_NAME }}
+          wait-for-service-stability: true
+          force-new-deployment: true
