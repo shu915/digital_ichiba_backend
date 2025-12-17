@@ -27,7 +27,7 @@ end
 
   shop = user.shop || Shop.create!(user: user, name: "ショップ#{i + 1}", description: "サンプル#{i + 1}")
 
-  image_path = Rails.root.join("db/seed_files/sample_product.webp")
+  image_path = Rails.root.join("db/seed_files/sample_product.png")
 
   100.times do |j|
     p = shop.products.create!(
@@ -37,7 +37,7 @@ end
       stock_quantity: rand(0..50)
     )
     File.open(image_path) do |file|
-      p.image.attach(io: file, filename: "sample_product.webp", content_type: "image/webp")
+      p.image.attach(io: file, filename: "sample_product.png", content_type: "image/png")
     end
   end
 end
