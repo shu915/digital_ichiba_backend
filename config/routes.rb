@@ -17,9 +17,11 @@ Rails.application.routes.draw do
     resources :shops, only: [ :index, :show ]
     resources :products, only: [ :create, :index, :show, :update, :destroy ]
     resources :orders, only: [ :index, :show ]
-    resource :stripe_accounts, only: [ :create ]
-    resource :stripe_checkouts, only: [ :create ]
-    post "stripe/webhooks/checkout", to: "stripe_checkout_webhooks#create"
-    post "stripe/webhooks/connect", to: "stripe_connect_webhooks#create"
+
+    resource :stripe_connect, only: [ :create ]
+    resource :stripe_checkout, only: [ :create ]
+
+    post "stripe/webhooks/connect", to: "stripe_webhooks_connect#create"
+    post "stripe/webhooks/checkout", to: "stripe_webhooks_checkout#create"
   end
 end

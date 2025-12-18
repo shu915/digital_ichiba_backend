@@ -29,8 +29,10 @@ class Api::StripeCheckoutsController < ActionController::API
       pid = item[:product_id]
       quantity = item[:quantity].to_i
       next if quantity <= 0
+
       product = products_by_id[pid]
       return render json: { error: "Product not found" }, status: :unprocessable_entity if product.nil?
+
       unit_amount = product.price_including_tax_cents
       total_cents += unit_amount * quantity
       line_items << {
@@ -58,8 +60,7 @@ class Api::StripeCheckoutsController < ActionController::API
       mode: "payment",
       line_items: line_items,
       success_url: "#{base_url}/cart/success?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url:  "#{base_url}/cart?canceled=1",
-      allow_promotion_codes: true,
+      cancel_url: "#{base_url}/cart?canceled=1",
 
       billing_address_collection: "required",
       shipping_address_collection: { allowed_countries: [ "JP" ] },
@@ -74,15 +75,18 @@ class Api::StripeCheckoutsController < ActionController::API
         }
       ]
     }
+
     # 注文確定用のメタデータ（Webhookで参照）
     session_params[:metadata] = {
       user_id: current_user.id.to_s,
       shop_id: shop.id.to_s
     }
+
     # 顧客IDがあれば設定（任意）
     if current_user.respond_to?(:stripe_customer_id) && current_user.stripe_customer_id.present?
       session_params[:customer] = current_user.stripe_customer_id
     end
+
     # Connect 送金（任意）
     if shop.stripe_connect_account_id.present?
       session_params[:payment_intent_data] = {
@@ -95,15 +99,16 @@ class Api::StripeCheckoutsController < ActionController::API
     render json: { url: checkout.url }, status: :ok
   end
 
-
   private
 
   def stripe_checkout_params
-    if params[:stripe_checkout].present?
-      permitted = params.require(:stripe_checkout).permit(cart: [ :product_id, :quantity ])
-    else
-      permitted = params.permit(cart: [ :product_id, :quantity ])
-    end
+    permitted =
+      if params[:stripe_checkout].present?
+        params.require(:stripe_checkout).permit(cart: [ :product_id, :quantity ])
+      else
+        params.permit(cart: [ :product_id, :quantity ])
+      end
+
     { cart: Array(permitted[:cart]).map { |h| h.to_h.symbolize_keys.slice(:product_id, :quantity) } }
   end
 end

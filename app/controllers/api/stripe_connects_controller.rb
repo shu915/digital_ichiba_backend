@@ -1,4 +1,4 @@
-class Api::StripeAccountsController < ActionController::API
+class Api::StripeConnectsController < ActionController::API
   include RailsJwtAuth
 
   def create
@@ -11,14 +11,16 @@ class Api::StripeAccountsController < ActionController::API
     begin
       account_id = shop.stripe_connect_account_id
       unless account_id.present?
-        account = Stripe::Account.create({
-          type: "express",
-          country: "JP",
-          capabilities: {
-            card_payments: { requested: true },
-            transfers: { requested: true }
+        account = Stripe::Account.create(
+          {
+            type: "express",
+            country: "JP",
+            capabilities: {
+              card_payments: { requested: true },
+              transfers: { requested: true }
+            }
           }
-        })
+        )
         shop.update!(stripe_connect_account_id: account.id)
         account_id = account.id
       end
@@ -26,18 +28,20 @@ class Api::StripeAccountsController < ActionController::API
       account = Stripe::Account.retrieve(account_id)
 
       # 常にStripeの最新状態で判定（DBのラグに依存しない）
-      onboarded = account.charges_enabled || account.details_submitted
+      onboarded = account.charges_enabled
 
       if onboarded
         login_link = Stripe::Account.create_login_link(account_id)
         render json: { login_url: login_link.url }, status: :ok
       else
-        account_link = Stripe::AccountLink.create({
-          account: account_id,
-          refresh_url: "#{base_url}/dashboard/shop#refresh",
-          return_url: "#{base_url}/dashboard/shop/refresh",
-          type: "account_onboarding"
-        })
+        account_link = Stripe::AccountLink.create(
+          {
+            account: account_id,
+            refresh_url: "#{base_url}/dashboard/shop#refresh",
+            return_url: "#{base_url}/dashboard/shop/refresh",
+            type: "account_onboarding"
+          }
+        )
         render json: { onboarding_url: account_link.url }, status: :ok
       end
     rescue Stripe::StripeError => e
