@@ -1,9 +1,8 @@
-class Api::StripeCheckoutWebhooksController < ActionController::API
-  # Stripe Checkout webhook endpoint: verify signature and handle Checkout events
+class Api::StripeWebhooksCheckoutController < ActionController::API
   def create
-    payload = request.body.read
+    payload = request.raw_post
     signature = request.env["HTTP_STRIPE_SIGNATURE"]
-    secret = ENV["STRIPE_CHECKOUT_WEBHOOK_SECRET"].presence || ENV["STRIPE_WEBHOOK_SECRET"]
+    secret = ENV["STRIPE_CHECKOUT_WEBHOOK_SECRET"]
 
     unless secret.present?
       Rails.logger.warn("Stripe checkout webhook secret is not set")

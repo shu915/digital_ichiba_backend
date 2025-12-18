@@ -1,7 +1,6 @@
-class Api::StripeConnectWebhooksController < ActionController::API
-  # Stripe Connect webhook endpoint: verify signature and handle Connect events
+class Api::StripeWebhooksConnectController < ActionController::API
   def create
-    payload = request.body.read
+    payload = request.raw_post
     signature = request.env["HTTP_STRIPE_SIGNATURE"]
     secret = ENV["STRIPE_CONNECT_WEBHOOK_SECRET"]
 
