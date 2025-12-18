@@ -1,6 +1,6 @@
 class OrderItem < ApplicationRecord
   belongs_to :order
-  belongs_to :product
+  belongs_to :product, optional: true
 
   validates :title_snapshot, presence: true
   validates :unit_price_cents_snapshot, presence: true,
