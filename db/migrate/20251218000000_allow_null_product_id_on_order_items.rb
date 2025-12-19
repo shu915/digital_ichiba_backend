@@ -8,5 +8,3 @@ class AllowNullProductIdOnOrderItems < ActiveRecord::Migration[8.0]
     add_foreign_key :order_items, :products, on_delete: :nullify
   end
 end
-
-
