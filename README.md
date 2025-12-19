@@ -17,18 +17,18 @@ SNSと直結して5分でオンラインショップを開設できるECプラ�
 - 注文・配送情報の管理
 
 ## バージョン情報
-このリポジトリのバージョン情報です。  
-Ruby 3.3.9  
-Rails 8.0.2.1  
-PostgreSQL 16.10  
-Docker 28.4.0  
+このリポジトリのバージョン情報です。
+- Ruby 3.3.9
+- Rails 8.0.2.1
+- PostgreSQL 16.10
+- Docker 28.4.0
 
-こちらは同じプロジェクトのフロントエンドのリポジトリです。  
-TypeScript 5.9.3  
-React 19.1.0  
-Next.js 15.5.7  
-Auth.js 5.0.0-beta.30  
-TailwindCSS 4.1.17  
+こちらは同じプロジェクトのフロントエンドのリポジトリです。
+- TypeScript 5.9.3
+- React 19.1.0
+- Next.js 15.5.7
+- Auth.js 5.0.0-beta.30
+- TailwindCSS 4.1.17
 
 ## ER図
 ![ER図](docs/digital_ichiba_erd.webp)
