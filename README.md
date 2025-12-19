@@ -36,7 +36,7 @@ docker compose up
 
 ```bash
 # DB（PostgreSQL）
-DB_HOST=localhost
+DB_HOST=db
 DB_NAME=digital_ichiba_development
 DB_USER=postgres
 DB_PASSWORD=postgres
