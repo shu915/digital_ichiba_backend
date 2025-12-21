@@ -75,5 +75,5 @@ SHIPPING_CENTS=500
 - **`STRIPE_SECRET_KEY`**: Stripe API呼び出し用の秘密鍵
 - **`STRIPE_*_WEBHOOK_SECRET`**: Webhook署名検証用（Checkout / Connect）
 - **`NEXT_URL`**: フロントのURL（CORSやStripeのリダイレクトで使用）
-- **`PLATFORM_FEE_PERCENT`**: プラットフォーム手数料（%）
-- **`SHIPPING_CENTS`**: 送料（セント換算）
+- **`PLATFORM_FEE_PERCENT`**: プラットフォーム手数料
+- **`SHIPPING_CENTS`**: 送料
