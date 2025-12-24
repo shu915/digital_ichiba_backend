@@ -23,28 +23,60 @@ Digital Ichibaは、ハンドメイド作家や衣料品、雑貨、生活用品
 - Docker 28.4.0
 
 ## リソース表
+
+### Health
 | Method | Path | 説明 |
 | --- | --- | --- |
 | GET | /up | ヘルスチェック（Rails標準） |
+
+### Auth
+| Method | Path | 説明 |
+| --- | --- | --- |
 | POST | /api/login | ログイン（JWT検証→ユーザー/ショップ情報返却） |
+
+### Shop
+| Method | Path | 説明 |
+| --- | --- | --- |
 | GET | /api/shop | 自分のショップ取得 |
 | POST | /api/shop | ショップ作成 |
 | PATCH | /api/shop | ショップ更新 |
-| PUT | /api/shop | ショップ更新 |
+
+### Shop Orders
+| Method | Path | 説明 |
+| --- | --- | --- |
 | GET | /api/shop/orders | 自分のショップの受注一覧 |
 | GET | /api/shop/orders/:id | 自分のショップの受注詳細 |
+
+### Shops
+| Method | Path | 説明 |
+| --- | --- | --- |
 | GET | /api/shops | ショップ一覧 |
 | GET | /api/shops/:id | ショップ詳細 |
+
+### Products
+| Method | Path | 説明 |
+| --- | --- | --- |
 | POST | /api/products | 商品作成 |
 | GET | /api/products | 商品一覧（条件付き取得あり） |
 | GET | /api/products/:id | 商品詳細 |
 | PATCH | /api/products/:id | 商品更新 |
-| PUT | /api/products/:id | 商品更新 |
 | DELETE | /api/products/:id | 商品削除 |
+
+### Orders（ユーザー）
+| Method | Path | 説明 |
+| --- | --- | --- |
 | GET | /api/orders | 注文一覧（ユーザー） |
 | GET | /api/orders/:id | 注文詳細（ユーザー） |
+
+### Stripe
+| Method | Path | 説明 |
+| --- | --- | --- |
 | POST | /api/stripe_connect | Stripe Connect（オンボーディング/ログインURL発行） |
 | POST | /api/stripe_checkout | Stripe Checkout（決済セッション作成） |
+
+### Stripe Webhooks
+| Method | Path | 説明 |
+| --- | --- | --- |
 | POST | /api/stripe/webhooks/connect | Connect Webhook |
 | POST | /api/stripe/webhooks/checkout | Checkout Webhook |
 
