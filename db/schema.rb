@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_01_000000) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_18_000000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_catalog.plpgsql"
@@ -60,7 +60,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_01_000000) do
 
   create_table "order_items", force: :cascade do |t|
     t.bigint "order_id", null: false
-    t.bigint "product_id", null: false
+    t.bigint "product_id"
     t.text "title_snapshot", null: false
     t.integer "unit_price_cents_snapshot", null: false
     t.integer "quantity", null: false
@@ -162,7 +162,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_01_000000) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "order_addresses", "orders"
   add_foreign_key "order_items", "orders"
-  add_foreign_key "order_items", "products"
+  add_foreign_key "order_items", "products", on_delete: :nullify
   add_foreign_key "orders", "shops"
   add_foreign_key "orders", "users"
   add_foreign_key "products", "shops"
