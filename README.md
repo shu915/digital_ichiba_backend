@@ -38,18 +38,18 @@ Digital Ichibaは、ハンドメイド作家や衣料品、雑貨、生活用品
 | Method | Path | 説明 |
 | --- | --- | --- |
 | POST | /api/login | ログイン（JWT検証→ユーザー/ショップ情報返却） |
+| GET | /api/orders | 注文一覧（ユーザー） |
+| GET | /api/orders/:id | 注文詳細（ユーザー） |
+| POST | /api/stripe_checkout | Stripe Checkout（決済セッション作成） |
 | GET | /api/shop | 自分のショップ取得 |
 | POST | /api/shop | ショップ作成 |
 | PATCH | /api/shop | ショップ更新 |
-| GET | /api/shop/orders | 自分のショップの受注一覧 |
-| GET | /api/shop/orders/:id | 自分のショップの受注詳細 |
 | POST | /api/products | 商品作成 |
 | PATCH | /api/products/:id | 商品更新 |
 | DELETE | /api/products/:id | 商品削除 |
-| GET | /api/orders | 注文一覧（ユーザー） |
-| GET | /api/orders/:id | 注文詳細（ユーザー） |
+| GET | /api/shop/orders | 自分のショップの受注一覧 |
+| GET | /api/shop/orders/:id | 自分のショップの受注詳細 |
 | POST | /api/stripe_connect | Stripe Connect（オンボーディング/ログインURL発行） |
-| POST | /api/stripe_checkout | Stripe Checkout（決済セッション作成） |
 
 ### Webhooks（署名検証）
 | Method | Path | 説明 |
